@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NAS Build — Massimiliano Berardi</title>
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+  <link rel="stylesheet" href="assets/style.css">
+  <script>
+    (function(){
+      var t=localStorage.getItem('theme');
+      var d=window.matchMedia('(prefers-color-scheme: dark)').matches;
+      document.documentElement.classList.add(t==='dark'||(!t&&d)?'dark':'light');
+    })();
+  </script>
+</head>
+<body>
+  <canvas id="ripple-canvas"></canvas>
+  <nav>
+    <a href="index.html" class="logo" aria-label="Home">
+    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <circle cx="24" cy="24" r="21.5" stroke="currentColor" stroke-width="1.2"/>
+      <text x="24" y="29.5" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="currentColor" letter-spacing="2">MB</text>
+    </svg>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html#projects">Work</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="assets/CV.pdf" download class="cv-btn">CV</a>
+      <button id="theme-toggle" class="theme-btn" aria-label="Toggle dark mode">
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+      </svg>
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/>
+        <line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/>
+        <line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+      </svg>
+    </button>
+    </div>
+  </nav>
+
+  <div class="project-intro">
+    <a href="index.html" class="back-link">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="15 18 9 12 15 6"/>
+      </svg>
+      Back
+    </a>
+    <div class="project-header">
+      <div class="year-chip">2026</div>
+      <h1>NAS Build</h1>
+      <p class="subtitle">Personal NAS with 3D printed case</p>
+    </div>
+  </div>
+
+  <div class="project-hero">
+    <img src="assets/pictures/nas/header.jpg" alt="NAS Build">
+  </div>
+
+  <div class="project-body">
+    <hr class="project-divider">
+    <div class="description">
+      <p>While browsing Printables I came across this elegant <a href="https://www.printables.com/model/837218-nas-case-6-bay-3-ssd" target="_blank" rel="noopener">NAS design</a> by makerunit.
+It finally pushed me to build the NAS I had been postponing for a long time: a compact system for backing up my server and desktop, assembled almost entirely from scratch.</p>
+<p>After some planning I settled on a motherboard with an integrated Intel N150 CPU, a SilverStone SX500 power supply, 32 GB of Corsair DDR5 SO-DIMM memory, and six 4 TB Seagate IronWolf hard drives.</p>
+<div class="image-row">
+  <figure class="ref-image row-item">
+    <img src="assets/pictures/nas/01.jpg" alt="Drive bay and panels">
+      <figcaption>Drive bay and panels</figcaption>
+  </figure>
+  <figure class="ref-image row-item">
+    <img src="assets/pictures/nas/02.jpg" alt="All the pieces">
+      <figcaption>All the pieces</figcaption>
+  </figure>
+  <figure class="ref-image row-item">
+    <img src="assets/pictures/nas/03.jpg" alt="Panel logo">
+      <figcaption>Panel logo</figcaption>
+  </figure>
+</div>
+<p>Printing was by far the most time-consuming part of the build.
+The design relies on exposed honeycomb infill, with no top or bottom layers, which made the print times especially long.
+In the end it took about two weeks to print everything.
+I chose PETG for its better thermal resistance.</p>
+<div class="image-row">
+  <figure class="ref-image row-item">
+    <img src="assets/pictures/nas/04.jpg" alt="Soldering iron tip">
+      <figcaption>Soldering iron tip</figcaption>
+  </figure>
+  <figure class="ref-image row-item">
+    <img src="assets/pictures/nas/05.jpg" alt="Drive bay inserts">
+      <figcaption>Drive bay inserts</figcaption>
+  </figure>
+  <figure class="ref-image row-item">
+    <img src="assets/pictures/nas/06.jpg" alt="Other insert">
+      <figcaption>Other insert</figcaption>
+  </figure>
+</div>
+<p>The case uses brass threaded inserts, which I was using for the first time.
+With the dedicated soldering iron tip, the process turned out to be surprisingly straightforward.</p>
+<div class="image-row">
+  <figure class="ref-image row-item">
+    <img src="assets/pictures/nas/07.jpg" alt="Drive bay">
+      <figcaption>Drive bay</figcaption>
+  </figure>
+  <figure class="ref-image row-item">
+    <img src="assets/pictures/nas/08.jpg" alt="Fans">
+      <figcaption>Fans</figcaption>
+  </figure>
+  <figure class="ref-image row-item">
+    <img src="assets/pictures/nas/09.jpg" alt="Front view">
+      <figcaption>Front view</figcaption>
+  </figure>
+  <figure class="ref-image row-item">
+    <video preload="metadata" playsinline muted>
+        <source src="assets/pictures/nas/vid-fans.mp4">
+      </video>
+      <figcaption>Fans running</figcaption>
+  </figure>
+</div>
+<p>At this stage the drive bay was fully assembled, with two 92mm PWM fans mounted for cooling.</p>
+<div class="image-row">
+  <figure class="ref-image row-item">
+    <img src="assets/pictures/nas/10.jpg" alt="Testing the motherboard">
+      <figcaption>Testing the motherboard</figcaption>
+  </figure>
+  <figure class="ref-image row-item">
+    <img src="assets/pictures/nas/11.jpg" alt="Button">
+      <figcaption>Button</figcaption>
+  </figure>
+  <figure class="ref-image row-item">
+    <img src="assets/pictures/nas/12.jpg" alt="Install mockup">
+      <figcaption>Install mockup</figcaption>
+  </figure>
+  <figure class="ref-image row-item">
+    <video preload="metadata" playsinline muted>
+        <source src="assets/pictures/nas/vid-motherboard.mp4">
+      </video>
+      <figcaption>Motherboard test</figcaption>
+  </figure>
+</div>
+<p>Before installation, I tested the motherboard together with its 12mm power button to make sure everything worked as expected.</p>
+<div class="image-row">
+  <figure class="ref-image row-item">
+    <img src="assets/pictures/nas/13.jpg" alt="Empty assembly">
+      <figcaption>Empty assembly</figcaption>
+  </figure>
+  <figure class="ref-image row-item">
+    <img src="assets/pictures/nas/14.jpg" alt="Drive bay inserted">
+      <figcaption>Drive bay inserted</figcaption>
+  </figure>
+  <figure class="ref-image row-item">
+    <img src="assets/pictures/nas/15.jpg" alt="Bottom panel">
+      <figcaption>Bottom panel</figcaption>
+  </figure>
+  <figure class="ref-image row-item">
+    <img src="assets/pictures/nas/16.jpg" alt="Front view">
+      <figcaption>Front view</figcaption>
+  </figure>
+  <figure class="ref-image row-item">
+    <img src="assets/pictures/nas/17.jpg" alt="Back view">
+      <figcaption>Back view</figcaption>
+  </figure>
+</div>
+<p>This was the completed assembly.
+The drive bay slides into sleds that give rigidity to the overall structure.
+The trickiest part was routing the SATA cables: tolerances were tight, but in the end everything fit properly.</p>
+<p>The project took shape over several months, between planning, budgeting, printing, and finding time for assembly.
+Some of the printed parts warped or shrank slightly, leaving small imperfections that mostly reflect the limits of my printer.
+Even so, I am very satisfied with the result.
+The six bays leave plenty of room for different storage configurations, and the low-power hardware suits the intended use well, since this system is mainly meant for cold storage and only gets powered on when needed.</p>
+    </div>
+  </div>
+
+  <footer>Massimiliano Berardi &middot; 2026</footer>
+  <script src="assets/animation.js"></script>
+</body>
+</html>
