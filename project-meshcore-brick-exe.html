@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MeshCore BRICK.EXE — Massimiliano Berardi</title>
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+  <link rel="stylesheet" href="assets/style.css">
+  <script>
+    (function(){
+      var t=localStorage.getItem('theme');
+      var d=window.matchMedia('(prefers-color-scheme: dark)').matches;
+      document.documentElement.classList.add(t==='dark'||(!t&&d)?'dark':'light');
+    })();
+  </script>
+</head>
+<body>
+  <canvas id="ripple-canvas"></canvas>
+  <nav>
+    <a href="index.html" class="logo" aria-label="Home">
+    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <circle cx="24" cy="24" r="21.5" stroke="currentColor" stroke-width="1.2"/>
+      <text x="24" y="29.5" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="currentColor" letter-spacing="2">MB</text>
+    </svg>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html#projects">Work</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="assets/CV.pdf" download class="cv-btn">CV</a>
+      <button id="theme-toggle" class="theme-btn" aria-label="Toggle dark mode">
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+      </svg>
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/>
+        <line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/>
+        <line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+      </svg>
+    </button>
+    </div>
+  </nav>
+
+  <div class="project-intro">
+    <a href="index.html" class="back-link">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="15 18 9 12 15 6"/>
+      </svg>
+      Back
+    </a>
+    <div class="project-header">
+      <div class="year-chip">2025</div>
+      <h1>MeshCore BRICK.EXE</h1>
+      <p class="subtitle">MeshCore radio with large battery</p>
+    </div>
+  </div>
+
+  <div class="project-hero">
+    <img src="assets/pictures/mesh_radio/header.jpg" alt="MeshCore BRICK.EXE">
+  </div>
+
+  <div class="project-body">
+    <hr class="project-divider">
+    <div class="description">
+      <p>I had been following Meshtastic for some time and had already tested it with friends, but its limits in range and reachability pushed me to look for alternatives.
+That led me to MeshCore and, eventually, to building a dedicated device around the RAKwireless WisBlock platform.
+The hardware is based on the RAK19007 WisBlock Base Board with a RAK4631 WisBlock Core, which combines a very low-power Nordic nRF52840 MCU with a Semtech SX1262 LoRa transceiver.
+I paired it with the RAK12500 GNSS module and the RAK1921 OLED display.
+The last step was finding a suitable enclosure, and I eventually settled on this versatile <a href="https://www.printables.com/model/286657-rak19007rak5005-case-for-meshtastic" target="_blank" rel="noopener">case model</a> by TonyG.</p>
+<div class="image-row">
+  <figure class="ref-image row-item">
+    <img src="assets/pictures/mesh_radio/01.jpg" alt="Front">
+      <figcaption>Front</figcaption>
+  </figure>
+  <figure class="ref-image row-item">
+    <img src="assets/pictures/mesh_radio/02.jpg" alt="Back">
+      <figcaption>Back</figcaption>
+  </figure>
+</div>
+<p>I chose the ribbed version of the case, with the opening for the display.
+It also includes a side push button, which works as the user button for navigating the menu.</p>
+<div class="image-row">
+  <figure class="ref-image row-item">
+    <img src="assets/pictures/mesh_radio/03.jpg" alt="Sourcing glass">
+      <figcaption>Sourcing glass</figcaption>
+  </figure>
+  <figure class="ref-image row-item">
+    <img src="assets/pictures/mesh_radio/04.jpg" alt="Fitting glass">
+      <figcaption>Fitting glass</figcaption>
+  </figure>
+  <figure class="ref-image row-item">
+    <img src="assets/pictures/mesh_radio/05.jpg" alt="Fitting glass">
+      <figcaption>Fitting glass</figcaption>
+  </figure>
+  <figure class="ref-image row-item">
+    <img src="assets/pictures/mesh_radio/06.jpg" alt="Front view">
+      <figcaption>Front view</figcaption>
+  </figure>
+</div>
+<p>This version of the case needed a protective cover for the display.
+Since I did not have any thin acrylic or hobby glass on hand, I cut a small rectangle from an old transparent plastic case with a rotary tool.
+I then cleaned up the edges with very fine sandpaper and adjusted the size until it fit tightly into the opening.</p>
+<div class="image-row">
+  <figure class="ref-image row-item">
+    <img src="assets/pictures/mesh_radio/07.jpg" alt="Display front">
+      <figcaption>Display front</figcaption>
+  </figure>
+  <figure class="ref-image row-item">
+    <img src="assets/pictures/mesh_radio/08.jpg" alt="Display back">
+      <figcaption>Display back</figcaption>
+  </figure>
+  <figure class="ref-image row-item">
+    <img src="assets/pictures/mesh_radio/09.jpg" alt="Display mounted">
+      <figcaption>Display mounted</figcaption>
+  </figure>
+  <figure class="ref-image row-item">
+    <img src="assets/pictures/mesh_radio/10.jpg" alt="Display ON">
+      <figcaption>Display ON</figcaption>
+  </figure>
+  <figure class="ref-image row-item">
+    <video preload="metadata" playsinline muted>
+        <source src="assets/pictures/mesh_radio/vid-test-display.mp4">
+      </video>
+      <figcaption>Display test</figcaption>
+  </figure>
+</div>
+<p>With the screen cover sorted out, I moved on to soldering the display and the user button, then mounting the assembly into the case with the supplied screws.</p>
+<div class="image-row">
+  <figure class="ref-image row-item">
+    <img src="assets/pictures/mesh_radio/11.jpg" alt="Batteries">
+      <figcaption>Batteries</figcaption>
+  </figure>
+  <figure class="ref-image row-item">
+    <img src="assets/pictures/mesh_radio/12.jpg" alt="Battery holders">
+      <figcaption>Battery holders</figcaption>
+  </figure>
+  <figure class="ref-image row-item">
+    <img src="assets/pictures/mesh_radio/13.jpg" alt="Unsuitable back cover">
+      <figcaption>Unsuitable back cover</figcaption>
+  </figure>
+  <figure class="ref-image row-item">
+    <img src="assets/pictures/mesh_radio/14.jpg" alt="Large back cover">
+      <figcaption>Large back cover</figcaption>
+  </figure>
+</div>
+<p>I explored several options for the battery system.
+I bought both 21700 and 18650 lithium cells and tested a few different configurations.
+In the end, I went with two 21700 cells in parallel for their much higher capacity.
+That decision required a larger back cover, which I improvised rather clumsily for this first version.
+I plan to revisit that part of the design once I have enough CAD experience to model a cleaner and more deliberate replacement.</p>
+<div class="image-row">
+  <figure class="ref-image row-item">
+    <img src="assets/pictures/mesh_radio/15.jpg" alt="Before final assembly">
+      <figcaption>Before final assembly</figcaption>
+  </figure>
+  <figure class="ref-image row-item">
+    <img src="assets/pictures/mesh_radio/16.jpg" alt="Complete assembly">
+      <figcaption>Complete assembly</figcaption>
+  </figure>
+</div>
+<p>Once everything was assembled, the radio was ready.
+Even with GPS enabled, the runtime is over 20 days.</p>
+<p>This was a very satisfying project to put together.
+The case design is clever and reflects the modular nature of the WisBlock system well.
+One of the main advantages of the build is that the battery can be swapped for different form factors and capacities by simply removing the back cover and disconnecting the link between the board and the pack.
+As mentioned above, the current back cover is still the weakest part of the build, since it was made with the single goal of accommodating the larger battery.
+I would also like to build slimmer and more portable variants around 18650 cells in case I decide to use the radio away from home.
+Thanks to local MeshCore repeaters, I have already been able to receive messages from users in cities some distance away.
+I am very curious to keep testing the radio’s capabilities and to follow MeshCore as the project continues to develop quickly.</p>
+    </div>
+  </div>
+
+  <footer>Massimiliano Berardi &middot; 2026</footer>
+  <script src="assets/animation.js"></script>
+</body>
+</html>
