@@ -542,6 +542,11 @@ html:not(.light) .project-card:hover {
   background: rgba(20, 20, 20, 0.35);
 }
 
+.lightbox-image[hidden],
+.lightbox-video[hidden] {
+  display: none;
+}
+
 .lightbox-video {
   display: block;
   width: auto;
