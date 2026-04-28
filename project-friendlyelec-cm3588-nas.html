@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FriendlyElec CM3588 NAS — Massimiliano Berardi</title>
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+  <link rel="stylesheet" href="assets/style.css?v=9bb12c4f00">
+  <script>
+    (function(){
+      var t=localStorage.getItem('theme');
+      var d=window.matchMedia('(prefers-color-scheme: dark)').matches;
+      document.documentElement.classList.add(t==='dark'||(!t&&d)?'dark':'light');
+    })();
+  </script>
+</head>
+<body>
+  <canvas id="ripple-canvas"></canvas>
+  <nav>
+    <a href="index.html" class="logo" aria-label="Home">
+    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <circle cx="24" cy="24" r="21.5" stroke="currentColor" stroke-width="1.2"/>
+      <text x="24" y="29.5" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="currentColor" letter-spacing="2">MB</text>
+    </svg>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html#projects">Work</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="assets/CV.pdf" download class="cv-btn">CV</a>
+      <button id="theme-toggle" class="theme-btn" aria-label="Toggle dark mode">
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+      </svg>
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/>
+        <line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/>
+        <line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+      </svg>
+    </button>
+    </div>
+  </nav>
+
+  <div class="project-intro">
+    <a href="index.html" class="back-link">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="15 18 9 12 15 6"/>
+      </svg>
+      Back
+    </a>
+    <div class="project-header">
+      <div class="year-chip">2024</div>
+      <h1>FriendlyElec CM3588 NAS</h1>
+      <p class="subtitle">SSD home nas based on RK3588</p>
+    </div>
+  </div>
+
+  <div class="project-hero">
+    <img src="assets/pictures/home_nas/header.jpg" alt="FriendlyElec CM3588 NAS">
+  </div>
+
+  <div class="project-body">
+    <hr class="project-divider">
+    <div class="description">
+      <p>I wanted to build a small, quiet NAS for my family that could handle file storage as well as media serving for an *arr stack.
+After some research, I settled on the FriendlyElec CM3588 NAS Kit with a CM3588 core module, 16GB of RAM, and 64GB of on-board eMMC storage.
+It covered all the use cases I had in mind.
+The platform provides four M.2 NVMe bays which, unlike hard drives, keep the system silent and comparatively power-efficient, along with enough memory and on-board storage for OpenMediaVault and a CPU capable of handling transcoding.
+For storage, I chose three Lexar NM620 2TB M.2 PCIe Gen3x4 NVMe SSDs in RAID 5.
+That gives the system enough capacity at the maximum speed supported by the kit, while still leaving one bay free for a future upgrade.</p>
+<figure class="ref-image">
+  <img src="assets/pictures/home_nas/01.jpg" alt="Package received">
+  <figcaption>Package received</figcaption>
+</figure>
+<p>I ordered the kit from China, and it arrived with the expected accessories and power supply.</p>
+<div class="image-row">
+  <figure class="ref-image row-item">
+    <img src="assets/pictures/home_nas/02.jpg" alt="Case">
+      <figcaption>Case</figcaption>
+  </figure>
+  <figure class="ref-image row-item">
+    <img src="assets/pictures/home_nas/03.jpg" alt="Test fit 1">
+      <figcaption>Test fit 1</figcaption>
+  </figure>
+  <figure class="ref-image row-item">
+    <img src="assets/pictures/home_nas/04.jpg" alt="Test fit 2">
+      <figcaption>Test fit 2</figcaption>
+  </figure>
+</div>
+<p>For the enclosure, I found this very nice <a href="https://www.printables.com/model/857903-friendlyelec-cm3588-nas-case-desktop-standalone" target="_blank" rel="noopener">design</a> by Fuzzler and printed it first in PETG.
+That turned out to be the wrong choice.
+Some of the buttons eventually snapped because the material was too stiff, and in practice the board never reaches temperatures that would make PLA unsuitable.
+Even so, the first print was good enough for a test fit and confirmed that the model was the right solution for the build.</p>
+<div class="image-row">
+  <figure class="ref-image row-item">
+    <img src="assets/pictures/home_nas/05.jpg" alt="SSDs">
+      <figcaption>SSDs</figcaption>
+  </figure>
+  <figure class="ref-image row-item">
+    <img src="assets/pictures/home_nas/06.jpg" alt="Installed storage">
+      <figcaption>Installed storage</figcaption>
+  </figure>
+</div>
+<p>Once the Lexar SSDs arrived, I mounted them and installed OpenMediaVault.
+From there I set up the basic users, permissions, and shared folders.
+I then moved over my personal *arr stack Docker Compose setup and adapted it to this system.
+That also meant configuring video device passthrough for the containers and verifying that hardware acceleration was working correctly.</p>
+<div class="image-row">
+  <figure class="ref-image row-item">
+    <img src="assets/pictures/home_nas/07.jpg" alt="New case 1">
+      <figcaption>New case 1</figcaption>
+  </figure>
+  <figure class="ref-image row-item">
+    <img src="assets/pictures/home_nas/08.jpg" alt="New case 2">
+      <figcaption>New case 2</figcaption>
+  </figure>
+</div>
+<p>As mentioned above, some of the PETG buttons snapped while I was working with the case.
+The original print also had a few minor imperfections caused by warping and shrinkage, so I decided to reprint the entire enclosure in PLA.</p>
+<div class="image-row">
+  <figure class="ref-image row-item">
+    <img src="assets/pictures/home_nas/09.jpg" alt="CPU fan">
+      <figcaption>CPU fan</figcaption>
+  </figure>
+  <figure class="ref-image row-item">
+    <img src="assets/pictures/home_nas/10.jpg" alt="ZH1.5 connectors">
+      <figcaption>ZH1.5 connectors</figcaption>
+  </figure>
+  <figure class="ref-image row-item">
+    <img src="assets/pictures/home_nas/11.jpg" alt="ZH detail">
+      <figcaption>ZH detail</figcaption>
+  </figure>
+</div>
+<p>While setting up the NAS, I noticed that temperatures were generally under control, but summers in Italy can be unforgiving.
+The board includes a 5V ZH1.5 connector specifically for a CPU fan, and the CM3588 core module has mounting holes for a 40mm fan.
+I bought a 40mm 5V 4010 hydraulic-bearing fan and replaced its PH connector with a ZH one.
+In hindsight, this was not the best choice.
+The fan produces a droning, scratchy noise, and in this build there is no real advantage to using such a low-profile model.
+At some point I will probably redesign the top cover to accommodate a taller Noctua fan, which should solve the problem properly.
+Even so, the current fan only starts above 50°C and keeps the device below 55°C in practice.
+Unless you are sitting very close to it, the noise is not especially noticeable from a few meters away.</p>
+<div class="image-row">
+  <figure class="ref-image row-item">
+    <img src="assets/pictures/home_nas/12.jpg" alt="Final fit">
+      <figcaption>Final fit</figcaption>
+  </figure>
+  <figure class="ref-image row-item">
+    <img src="assets/pictures/home_nas/13.jpg" alt="Closed lid">
+      <figcaption>Closed lid</figcaption>
+  </figure>
+  <figure class="ref-image row-item">
+    <img src="assets/pictures/home_nas/14.jpg" alt="Packed for the trip">
+      <figcaption>Packed for the trip</figcaption>
+  </figure>
+</div>
+<p>After final assembly and testing, I packed the NAS securely and brought it to my family during the summer holidays.</p>
+<div class="image-row">
+  <figure class="ref-image row-item">
+    <img src="assets/pictures/home_nas/15.jpg" alt="Final location 1">
+      <figcaption>Final location 1</figcaption>
+  </figure>
+  <figure class="ref-image row-item">
+    <img src="assets/pictures/home_nas/16.jpg" alt="Final location 2">
+      <figcaption>Final location 2</figcaption>
+  </figure>
+  <figure class="ref-image row-item">
+    <img src="assets/pictures/home_nas/17.jpg" alt="Final location 3">
+      <figcaption>Final location 3</figcaption>
+  </figure>
+</div>
+<p>It reached its final destination next to the modem and has been working flawlessly ever since.
+I still connect remotely from time to time for maintenance and supervised updates, but overall it has been almost completely hands-off.</p>
+<p>The RK3588 has turned out to be a surprisingly capable platform.
+Transcoding has never run into any obvious bottlenecks, and the various services have behaved without any performance-related issues.
+The NAS is also fairly inconspicuous and does not consume much power, so it stays on all the time.
+At the moment I do not expect to populate the fourth SSD bay, but the option is still there if storage needs to increase.
+I will definitely replace the fan at some point, though, since my workstation in Italy sits right next to it and the intermittent noise is more annoying than I would like.
+Overall, this was a very rewarding project and a good exercise in Docker-based service interoperability.</p>
+    </div>
+  </div>
+
+  <footer>Massimiliano Berardi &middot; 2026</footer>
+  <script src="assets/animation.js?v=f67c58d99d"></script>
+</body>
+</html>
