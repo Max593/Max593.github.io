@@ -65,7 +65,12 @@ def is_video(src):
     return os.path.splitext(src)[1].lower() in VIDEO_EXTENSIONS
 
 def render_media_figure(alt, src, row_item=False):
-    classes = 'ref-image row-item' if row_item else 'ref-image'
+    classes = ['ref-image']
+    if row_item:
+        classes.append('row-item')
+    if is_video(src):
+        classes.append('video-figure')
+    class_attr = ' '.join(classes)
     caption_html = f'\n  <figcaption>{alt}</figcaption>' if alt else ''
 
     if is_video(src):
@@ -81,7 +86,7 @@ def render_media_figure(alt, src, row_item=False):
         media_html = media_html.replace('\n  ', '\n    ')
         caption_html = f'\n    <figcaption>{alt}</figcaption>' if alt else ''
 
-    return f'<figure class="{classes}">\n{media_html}{caption_html}\n</figure>'
+    return f'<figure class="{class_attr}">\n{media_html}{caption_html}\n</figure>'
 
 def md_to_html(text):
     """Paragraphs, inline media, and media rows: ![A](a.png) | ![B](clip.mp4)"""
