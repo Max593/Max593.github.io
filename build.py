@@ -9,6 +9,7 @@ Generates thumbnails in assets/thumbs/ (requires Pillow: pip install pillow)
 import os
 import re
 import shutil
+import hashlib
 
 VIDEO_EXTENSIONS = {'.mp4', '.webm', '.mov'}
 
@@ -115,6 +116,12 @@ def md_to_html(text):
 def slugify(name):
     return os.path.splitext(os.path.basename(name))[0]
 
+def asset_url(base, rel_path):
+    path = os.path.join(base, rel_path)
+    with open(path, 'rb') as f:
+        digest = hashlib.sha256(f.read()).hexdigest()[:10]
+    return f'{rel_path}?v={digest}'
+
 # ── HTML templates ──────────────────────────────────────────────────────────
 
 # Inline theme init prevents flash of wrong theme
@@ -144,7 +151,7 @@ THEME_BTN = '''<button id="theme-toggle" class="theme-btn" aria-label="Toggle da
       </svg>
     </button>'''
 
-def make_head(title, css_path):
+def make_head(title, css_url):
     return f'''<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -152,7 +159,7 @@ def make_head(title, css_path):
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{title}</title>
   <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
-  <link rel="stylesheet" href="{css_path}">
+  <link rel="stylesheet" href="{css_url}">
 {THEME_SCRIPT}
 </head>
 <body>
@@ -174,7 +181,7 @@ def make_nav(work_href):
   </nav>'''
 
 FOOT = '''  <footer>Massimiliano Berardi &middot; 2026</footer>
-  <script src="{js_path}"></script>
+  <script src="{js_url}"></script>
 </body>
 </html>'''
 
@@ -198,7 +205,8 @@ def card_html(meta, slug):
 
 def build_index(projects):
     cards = '\n'.join(card_html(meta, slug) for slug, meta, _ in projects)
-    html = make_head('Massimiliano Berardi', 'assets/style.css')
+    base = os.path.dirname(os.path.abspath(__file__))
+    html = make_head('Massimiliano Berardi', asset_url(base, 'assets/style.css'))
     html += '\n' + make_nav('#projects') + '\n'
     html += '''
   <section class="hero">
@@ -223,7 +231,7 @@ def build_index(projects):
   </section>
 
 '''
-    html += FOOT.format(js_path='assets/animation.js')
+    html += FOOT.format(js_url=asset_url(base, 'assets/animation.js'))
     return html
 
 # ── Project page ────────────────────────────────────────────────────────────
@@ -234,8 +242,9 @@ def build_project_page(meta, body):
     subtitle = meta.get('subtitle', '')
     image = meta.get('image', '')
     description_html = md_to_html(body)
+    base = os.path.dirname(os.path.abspath(__file__))
 
-    html = make_head(f'{title} — Massimiliano Berardi', 'assets/style.css')
+    html = make_head(f'{title} — Massimiliano Berardi', asset_url(base, 'assets/style.css'))
     html += '\n' + make_nav('index.html#projects') + '\n'
     html += f'''
   <div class="project-intro">
@@ -264,7 +273,7 @@ def build_project_page(meta, body):
   </div>
 
 '''
-    html += FOOT.format(js_path='assets/animation.js')
+    html += FOOT.format(js_url=asset_url(base, 'assets/animation.js'))
     return html
 
 # ── Main ────────────────────────────────────────────────────────────────────

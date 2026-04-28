@@ -787,6 +787,8 @@ footer {
   }
 
   .cv-btn {
-    display: none;
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    padding: 0.3rem 0.55rem;
   }
 }
