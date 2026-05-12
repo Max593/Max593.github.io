@@ -427,6 +427,32 @@ html:not(.light) .project-card:hover {
   margin-top: 1.4em;
 }
 
+.project-body .description p code {
+  padding: 0.08rem 0.32rem;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  background: var(--card);
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  font-size: 0.88em;
+}
+
+.code-block {
+  margin: 2rem 0;
+  padding: 1rem 1.15rem;
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  background: var(--card);
+  color: var(--text);
+  font-size: 0.9rem;
+  line-height: 1.65;
+}
+
+.code-block code {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  white-space: pre;
+}
+
 /* ── Reference images in project body ─────────────── */
 .image-row {
   display: flex;

@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Borgmatic NAS Setup — Massimiliano Berardi</title>
+  <link rel="icon" type="image/svg+xml" href="assets/logo.svg">
+  <link rel="stylesheet" href="assets/style.css?v=4da5b657b2">
+  <script>
+    (function(){
+      var t=localStorage.getItem('theme');
+      var d=window.matchMedia('(prefers-color-scheme: dark)').matches;
+      document.documentElement.classList.add(t==='dark'||(!t&&d)?'dark':'light');
+    })();
+  </script>
+</head>
+<body>
+  <canvas id="ripple-canvas"></canvas>
+  <nav>
+    <a href="index.html" class="logo" aria-label="Home">
+    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <circle cx="24" cy="24" r="21.5" stroke="currentColor" stroke-width="1.2"/>
+      <text x="24" y="29.5" text-anchor="middle" font-family="Georgia, serif" font-size="13" fill="currentColor" letter-spacing="2">MB</text>
+    </svg>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html#projects">Work</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="assets/CV.pdf" download class="cv-btn">CV</a>
+      <button id="theme-toggle" class="theme-btn" aria-label="Toggle dark mode">
+      <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+      </svg>
+      <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/>
+        <line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/>
+        <line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+      </svg>
+    </button>
+    </div>
+  </nav>
+
+  <div class="project-intro">
+    <a href="index.html" class="back-link">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="15 18 9 12 15 6"/>
+      </svg>
+      Back
+    </a>
+    <div class="project-header">
+      <div class="year-chip">2026</div>
+      <h1>Borgmatic NAS Setup</h1>
+      <p class="subtitle">Borgmatic configuration and infrastructure</p>
+    </div>
+  </div>
+
+  <div class="project-hero">
+    <img src="assets/pictures/borgmatic_setup/header.jpg" alt="Borgmatic NAS Setup">
+  </div>
+
+  <div class="project-body">
+    <hr class="project-divider">
+    <div class="description">
+      <p>After completing the NAS build, I wanted to put it to use as a proper target for system backups.
+I started looking into Borg and Borgmatic, and the approach matched what I had in mind: repository-based backups, snapshot-style recovery points, and flexible path definitions using regular-expression-style patterns.
+That made Borgmatic a good candidate for the kind of backup infrastructure I wanted to implement.</p>
+<p>The first step was defining what TrueNAS needed to provide.
+There is no official Borgmatic application for this setup, and the closest community option I found was BorgWarehouse, which unfortunately did not work for me.
+I decided to use a more custom approach instead.</p>
+<div class="image-row">
+  <figure class="ref-image row-item">
+    <img src="assets/pictures/borgmatic_setup/01.jpg" alt="Dataset">
+      <figcaption>Dataset</figcaption>
+  </figure>
+  <figure class="ref-image row-item">
+    <img src="assets/pictures/borgmatic_setup/02.jpg" alt="Permissions">
+      <figcaption>Permissions</figcaption>
+  </figure>
+</div>
+<p>On TrueNAS, I created a Generic dataset specifically for Borg.
+At this stage no additional dataset settings were necessary.
+I then set up an LXC container to manage the Borg repositories.
+The container exposes its SSH port on <code>2222</code> and maps its <code>/srv/borg</code> storage to the newly created dataset mounted on the host at <code>/mnt/nas_pool/borg</code>.
+It requires very few resources, so I assigned it a single core and <code>1GB</code> of RAM.</p>
+<figure class="ref-image">
+  <img src="assets/pictures/borgmatic_setup/03.jpg" alt="LXC container">
+  <figcaption>LXC container</figcaption>
+</figure>
+<p>To avoid file ownership and permission issues, I created a dedicated <code>borgbackup</code> user.
+This user owns the dataset and has exclusive read, write, and execute permissions.
+A matching user with the same name, UID, and GID exists inside the container as well.
+This matters because the container writes to <code>/srv/borg</code>, while the actual storage lives on the TrueNAS host.
+Matching the UID and GID ensures that writes from the container user are seen by TrueNAS as writes from the correct host-side user.</p>
+<p>To set up connectivity, I created a dedicated SSH key on my local machine:</p>
+<pre class="code-block"><code class="language-bash">ssh-keygen -t ed25519 -f ~/.ssh/id_ed25519_borgbackup -C &quot;arch-desktop-borgbackup&quot;</code></pre>
+<p>I then added a host alias to my local SSH config for convenience:</p>
+<pre class="code-block"><code class="language-ssh-config">~/.ssh/config
+---
+Host truenas-borg
+    HostName 192.168.178.65
+    Port 2222
+    User borgbackup
+    IdentityFile ~/.ssh/id_ed25519_borgbackup
+    IdentitiesOnly yes
+    ServerAliveInterval 10
+    ServerAliveCountMax 30</code></pre>
+<p>This allows Borg and Borgmatic to refer to the repository using a cleaner path:</p>
+<pre class="code-block"><code class="language-text">ssh://truenas-borg/srv/borg/repos/arch-desktop</code></pre>
+<p>The port and identity file are handled by SSH, so they do not need to be hardcoded in the Borgmatic configuration.</p>
+<p>I then hardened SSH access inside the container by disabling password authentication and root login in a dedicated server-side config file:</p>
+<pre class="code-block"><code class="language-ssh-config">/etc/ssh/sshd_config.d/borgbackup.conf
+---
+PasswordAuthentication no
+KbdInteractiveAuthentication no
+PermitRootLogin no
+PubkeyAuthentication yes
+AllowUsers borgbackup
+ClientAliveInterval 10
+ClientAliveCountMax 30</code></pre>
+<p>Finally, I restricted the SSH key in <code>/home/borgbackup/.ssh/authorized_keys</code> so it can only run <code>borg serve</code> against the intended repository:</p>
+<pre class="code-block"><code class="language-text">command=&quot;borg serve --append-only --restrict-to-repository /srv/borg/repos/arch-desktop&quot;,restrict ssh-ed25519 &lt;public key&gt; arch-desktop-borgbackup</code></pre>
+<p>At this point I moved on to the local Borgmatic configuration stored in <code>~/.config/borgmatic/config.yaml</code>.</p>
+<pre class="code-block"><code class="language-yaml">source_directories:
+    - /home/max
+
+one_file_system: true
+source_directories_must_exist: true
+
+patterns_from:
+    - /home/max/.config/borgmatic/patterns/00-root.patterns
+    - /home/max/.config/borgmatic/patterns/10-personal-data.patterns
+    - /home/max/.config/borgmatic/patterns/20-dotfiles.patterns
+    - /home/max/.config/borgmatic/patterns/30-app-config.patterns
+    - /home/max/.config/borgmatic/patterns/40-game-saves.patterns
+    - /home/max/.config/borgmatic/patterns/50-projects.patterns
+    - /home/max/.config/borgmatic/patterns/99-default-exclude.patterns
+
+repositories:
+    - path: ssh://truenas-borg/srv/borg/repos/arch-desktop
+      label: truenas
+      encryption: repokey-blake2
+      append_only: true
+      make_parent_directories: true
+
+compression: zstd,10
+archive_name_format: &#x27;{hostname}-system-{now:%Y-%m-%dT%H:%M:%S}&#x27;
+ssh_command: ssh -o ServerAliveInterval=10
+
+keep_weekly: 8
+keep_monthly: 12
+keep_yearly: 3
+
+checks:
+    - name: repository
+      frequency: 1 month
+    - name: archives
+      frequency: 1 month
+    - name: extract
+      frequency: 1 month
+
+check_last: 3
+
+verbosity: 1
+color: false</code></pre>
+<p>The configuration starts from <code>/home/max</code>, but <code>one_file_system</code> keeps the backup from crossing filesystem boundaries.
+This prevents Borgmatic from accidentally following mounts that do not belong to the local system backup.
+The actual include and exclude rules are split into separate pattern files, which keeps the main configuration readable and makes each group easier to maintain.</p>
+<p>The repository points to the SSH alias configured earlier, so Borgmatic can use <code>ssh://truenas-borg/srv/borg/repos/arch-desktop</code> without repeating the port, user, or identity file.
+The repository uses <code>repokey-blake2</code> encryption and is configured as append-only from the client side, matching the restricted <code>borg serve</code> command inside the container.
+I also enabled <code>zstd,10</code> compression and a timestamped archive name so each backup is easy to identify.</p>
+<p>Retention is intentionally simple: weekly archives are kept for two months, monthly archives for a year, and yearly archives for three years.
+The configured checks cover the repository, the archives, and extraction, with Borgmatic only checking the last three archives to keep routine verification reasonably fast.</p>
+<p>Some pattern files are quite straightforward, such as <code>10-personal-data.patterns</code>:</p>
+<pre class="code-block"><code class="language-text"># Personal data directories to back up completely.
++ /home/max/Calibre Library
++ /home/max/Documents
++ /home/max/Pictures</code></pre>
+<p>Others express more extensive exclusion rules, such as <code>50-projects.patterns</code>:</p>
+<pre class="code-block"><code class="language-text"># Project work, with generated dependencies and caches excluded.
+- /home/max/Projects/**/.venv
+- /home/max/Projects/**/venv
+- /home/max/Projects/**/node_modules
+- /home/max/Projects/**/__pycache__
+- /home/max/Projects/**/.pytest_cache
+- /home/max/Projects/**/.mypy_cache
+- /home/max/Projects/**/.ruff_cache
+- /home/max/Projects/**/.cache
+- /home/max/Projects/**/build
+- /home/max/Projects/**/dist
+- /home/max/Projects/**/.tox
+- /home/max/Projects/**/.gradle
+- /home/max/Projects/**/.idea
++ /home/max/Projects</code></pre>
+<p>The remaining pattern files are more personal, so I am not including them here.</p>
+<p>With the container, SSH access, and local configuration in place, I created the repository from the Arch desktop using Borgmatic:</p>
+<pre class="code-block"><code class="language-bash">borgmatic repo-create --append-only</code></pre>
+<p>The Borg passphrase was provided manually through an environment variable for the current shell session.
+Since I use zsh, the prompt command was:</p>
+<pre class="code-block"><code class="language-zsh">read -rs &quot;BORG_PASSPHRASE?New Borg passphrase: &quot;
+echo
+export BORG_PASSPHRASE</code></pre>
+<p>I intentionally did not store the Borg passphrase in the Borgmatic configuration file or in an environment file.
+Since this is cold storage and I run backups manually, entering the passphrase from my password manager is simple and safer.</p>
+<p>After creating the repository, I exported the Borg key:</p>
+<pre class="code-block"><code class="language-bash">borg key export ssh://truenas-borg/srv/borg/repos/arch-desktop \
+    ~/arch-desktop-borg-key.txt</code></pre>
+<p>This exported key is not an SSH key.
+It is a backup copy of the Borg repository encryption key, and it is useful if the repository key metadata is ever damaged or lost.</p>
+<p>After the repository was created, I ran the first backup manually:</p>
+<pre class="code-block"><code class="language-bash">borgmatic create --stats --list</code></pre>
+<p>I then verified the repository:</p>
+<pre class="code-block"><code class="language-bash">borgmatic check</code></pre>
+<p>I also inspected the archive list directly with Borg:</p>
+<pre class="code-block"><code class="language-bash">borg list ssh://truenas-borg/srv/borg/repos/arch-desktop</code></pre>
+<p>Finally, I tested <code>borg mount</code> to make sure archives could be browsed directly.
+On Arch Linux, this requires <code>python-pyfuse3</code> and <code>fuse3</code> to be installed.</p>
+<p>For convenience, I assembled a small wrapper script at <code>~/.local/bin/borg-cold</code>.
+I am still refining it, but at the moment it exposes the following actions:</p>
+<pre class="code-block"><code class="language-text">borg-cold ssh-test
+borg-cold backup
+borg-cold check
+borg-cold list
+borg-cold files ARCHIVE
+borg-cold tree ARCHIVE
+borg-cold mount ARCHIVE
+borg-cold umount
+borg-cold key-export</code></pre>
+<div class="image-row">
+  <figure class="ref-image row-item">
+    <img src="assets/pictures/borgmatic_setup/04.jpg" alt="Create backup">
+      <figcaption>Create backup</figcaption>
+  </figure>
+  <figure class="ref-image row-item">
+    <img src="assets/pictures/borgmatic_setup/05.jpg" alt="Listing all backups">
+      <figcaption>Listing all backups</figcaption>
+  </figure>
+</div>
+<p>Each action prompts for the Borg passphrase when needed.
+I might eventually integrate this with a password manager, but for now the manual prompt is acceptable because the backups are intentionally manual and the NAS is not always powered on.</p>
+<p>So far the setup has been working without issues.
+I do plan to revisit it after I have more experience running it regularly.</p>
+    </div>
+  </div>
+
+  <footer>Massimiliano Berardi &middot; 2026</footer>
+  <script src="assets/animation.js?v=f67c58d99d"></script>
+</body>
+</html>

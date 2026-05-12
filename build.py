@@ -10,6 +10,7 @@ import os
 import re
 import shutil
 import hashlib
+import html
 
 VIDEO_EXTENSIONS = {'.mp4', '.webm', '.mov'}
 
@@ -56,11 +57,25 @@ def parse_md(path):
     return meta, body
 
 def render_inline_markdown(text):
-    def replace_link(match):
-        label, href = match.group(1), match.group(2)
-        return f'<a href="{href}" target="_blank" rel="noopener">{label}</a>'
+    inline_pattern = re.compile(r'(`[^`]+`|\[([^\]]+)\]\(([^)]+)\))')
+    parts = []
+    last = 0
 
-    return re.sub(r'\[([^\]]+)\]\(([^)]+)\)', replace_link, text)
+    for match in inline_pattern.finditer(text):
+        parts.append(html.escape(text[last:match.start()]))
+        token = match.group(0)
+        if token.startswith('`'):
+            parts.append(f'<code>{html.escape(token[1:-1])}</code>')
+        else:
+            label, href = match.group(2), match.group(3)
+            parts.append(
+                f'<a href="{html.escape(href, quote=True)}" target="_blank" rel="noopener">'
+                f'{html.escape(label)}</a>'
+            )
+        last = match.end()
+
+    parts.append(html.escape(text[last:]))
+    return ''.join(parts)
 
 def is_video(src):
     return os.path.splitext(src)[1].lower() in VIDEO_EXTENSIONS
@@ -89,12 +104,50 @@ def render_media_figure(alt, src, row_item=False):
 
     return f'<figure class="{class_attr}">\n{media_html}{caption_html}\n</figure>'
 
+def split_markdown_blocks(text):
+    blocks = []
+    current = []
+    in_code = False
+
+    for line in text.splitlines():
+        if line.startswith('```'):
+            current.append(line)
+            if in_code:
+                blocks.append('\n'.join(current).strip('\n'))
+                current = []
+            in_code = not in_code
+            continue
+
+        if in_code:
+            current.append(line)
+            continue
+
+        if line.strip():
+            current.append(line)
+        elif current:
+            blocks.append('\n'.join(current).strip('\n'))
+            current = []
+
+    if current:
+        blocks.append('\n'.join(current).strip('\n'))
+
+    return blocks
+
 def md_to_html(text):
-    """Paragraphs, inline media, and media rows: ![A](a.png) | ![B](clip.mp4)"""
+    """Paragraphs, fenced code, inline media, and media rows."""
     image_pattern = re.compile(r'^!\[([^\]]*)\]\(([^)]+)\)$')
-    blocks = [b.strip() for b in re.split(r'\n{2,}', text) if b.strip()]
+    code_pattern = re.compile(r'^```([A-Za-z0-9_-]*)\n(.*?)\n```$', re.DOTALL)
+    blocks = split_markdown_blocks(text)
     parts = []
     for block in blocks:
+        code_match = code_pattern.match(block)
+        if code_match:
+            lang, code = code_match.group(1), code_match.group(2)
+            language_class = f' class="language-{html.escape(lang, quote=True)}"' if lang else ''
+            parts.append(f'<pre class="code-block"><code{language_class}>{html.escape(code)}</code></pre>')
+            continue
+
+        block = block.strip()
         m = image_pattern.match(block)
         if m:
             alt, src = m.group(1), m.group(2)
