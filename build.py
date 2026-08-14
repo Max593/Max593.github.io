@@ -358,7 +358,15 @@ def main():
             else:
                 print(f"  [!] Image not found: assets/pictures/{image}")
 
-    projects.sort(key=lambda x: int(x[1].get('year', 0) or 0), reverse=True)
+    # Newer years come first; an optional higher order value takes precedence
+    # only among projects from the same year.
+    projects.sort(
+        key=lambda x: (
+            int(x[1].get('year', 0) or 0),
+            int(x[1].get('order', 0) or 0),
+        ),
+        reverse=True,
+    )
 
     index_path = os.path.join(base, 'index.html')
     with open(index_path, 'w', encoding='utf-8') as f:

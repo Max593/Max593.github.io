@@ -1,6 +1,7 @@
 ---
 title: NAS Build
 year: 2026
+order: 1
 subtitle: Personal NAS with 3D printed case
 image: nas/header.jpg
 ---

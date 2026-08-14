@@ -1,6 +1,7 @@
 ---
 title: Borgmatic NAS Setup
 year: 2026
+order: 2
 subtitle: Borgmatic configuration and infrastructure
 image: borgmatic_setup/header.jpg
 ---
